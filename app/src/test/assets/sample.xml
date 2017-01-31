@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+    <code>OK</code>
+    <message>OK</message>
+    <count>1</count>
+    <pages>1</pages>
+    <information>
+        <app_name>SP Test App</app_name>
+        <appid>157</appid>
+        <virtual_currency>Coins</virtual_currency>
+        <country>US</country>
+        <language>EN</language>
+        <support_url>http://iframe.fyber.com/mobile/DE/157/my_offers</support_url>
+    </information>
+    <offers>
+        <offer>
+          <title>ssss</title>
+            <offer_id>135542</offer_id>
+            <teaser>Download and START 2</teaser>
+            <required_actions>Download and START</required_actions>
+            <link>http://iframe.fyber.com/</link>
+            <offer_types>
+                <offer_type id="101">Download</offer_type>
+                <offer_type id="112">Free</offer_type>
+            </offer_types>
+            <thumbnail>
+                <lowres>http://cdn.fyber.com/assets/1808/icon175x175-2_square_60.png</lowres>
+                <hires>http://cdn4.sponsorpay.com/assets/64941/fortune_wheel_square_175.png</hires>
+            </thumbnail>
+            <payout>19</payout>
+            <time_to_payout>
+                <amount>1800</amount>
+                <readable>30 minutes</readable>
+            </time_to_payout>
+        </offer>
+    </offers>
+</response>
