@@ -1,8 +1,5 @@
-package com.mandel.fybertest.model;
+package com.mandel.storecast.model;
 
-/**
- * Created by ss on 11/6/2016.
- */
 public class ImageItem {
 	
 	private String mTitle = "";

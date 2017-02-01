@@ -1,4 +1,4 @@
-package com.mandel.fybertest;
+package com.mandel.storecast;
 
 import android.content.Intent;
 import android.os.SystemClock;
@@ -7,8 +7,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.mandel.fybertest.activity.MainActivity;
-import com.mandel.fybertest.activity.OffersActivity;
+import com.mandel.storecast.activity.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,10 +19,18 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.pressKey;
+
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.times;
+
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+
+import	android.view.KeyEvent;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity>
@@ -42,45 +49,47 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 		mActivity = (MainActivity)getActivity();
 	}
 
+	
 	@Test
-	public void testSuccess2Test() {
+	public void testScrollTest() {
 
-		onView(withId(R.id.button)).perform(click());
-		SystemClock.sleep(3000);
-		intended(hasComponent(OffersActivity.class.getName()));
+		onView(withId(R.id.search)).perform(typeText("mobile"));
+		SystemClock.sleep(2000);
+		onView(withId(R.id.search)).perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
+		SystemClock.sleep(4000);
 
+
+		onView(withId(R.id.listview))
+			.perform(scrollToPosition(10000));
+		SystemClock.sleep(6000);
+		
+		onView(withId(R.id.listview))
+			.perform(scrollToPosition(10));
+
+		SystemClock.sleep(6000);
+		
+		onView(withId(R.id.listview)).check(matches(isDisplayed()));
 	}
 	
 	@Test
-	public void testFaulureTest() {
+	public void testEmpty() {
 
-		onView(withId(R.id.apikey)).perform(clearText());
-		onView(withId(R.id.apikey)).perform(typeText("111111"));
-		onView(withId(R.id.button)).perform(click());
+		onView(withId(R.id.search)).perform(typeText("ssdffghjkjkmobile"));
 		SystemClock.sleep(2000);
-		intended(hasComponent(OffersActivity.class.getName()), times(0));
+		onView(withId(R.id.search)).perform(click(), pressKey(KeyEvent.KEYCODE_ENTER));
+		SystemClock.sleep(4000);
+
+
+		onView(withId(R.id.listview))
+			.perform(scrollToPosition(100));
+		SystemClock.sleep(6000);
+		
+		onView(withId(R.id.listview))
+			.perform(scrollToPosition(10));
+
+		SystemClock.sleep(6000);
+		
+		onView(withId(R.id.listview)).check(matches(isDisplayed()));
 	}
 	
-	@Test
-	public void testSuccessTest() {
-	    
-		onView(withId(R.id.format)).perform(clearText());
-		onView(withId(R.id.format)).perform(typeText("xml"));
-		onView(withId(R.id.appid)).perform(clearText());
-		onView(withId(R.id.appid)).perform(typeText("2070"));
-		onView(withId(R.id.uid)).perform(clearText());
-		onView(withId(R.id.uid)).perform(typeText("spiderman"));
-		onView(withId(R.id.apikey)).perform(clearText());
-		onView(withId(R.id.apikey)).perform(typeText("1c915e3b5d42d05136185030892fbb846c278927"));
-		onView(withId(R.id.button)).perform(click());
-		SystemClock.sleep(2000);
-		intended(hasComponent(OffersActivity.class.getName()));
-
-	}
-
-    
-    @Rule
-    public IntentsTestRule<OffersActivity> mOffersActivity =
-            new IntentsTestRule<OffersActivity>(OffersActivity.class);
-
 }

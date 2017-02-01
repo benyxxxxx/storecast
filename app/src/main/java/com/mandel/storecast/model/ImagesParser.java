@@ -1,43 +1,43 @@
-package com.mandel.fybertest.activity;
+package com.mandel.storecast.model;
 
-import com.mandel.fybertest.model.ImageItem;
+import com.mandel.storecast.model.ImageItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ss on 11/6/2016.
- */
 public class ImagesParser {
 	
-	public static List<ImageItem> parseJson(JSONObject obj) {
-
-		ArrayList<ImageItem> list = new ArrayList<ImageItem>();
+	public static  int parseJson(String obj, List<ImageItem> list, int listIdxStart) {
+		try {
+			return parseJson(new JSONObject(obj), list, listIdxStart);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return -1;
+		}	
+	}
+	
+	public static  int parseJson(JSONObject obj, List<ImageItem> list, int listIdxStart) {
 		
+		int querySize = 0;
 		try {
 			JSONArray images = obj.getJSONArray("images");
-			
+			querySize = obj.getInt("result_count");
 			if (images != null) {
 				
-				for (int i = 0; i < images.length(); i++) {
+				for (int i = 0, listIdx = listIdxStart; i < images.length(); i++, listIdx++) {
 					JSONObject image = (JSONObject)images.get(i);
-				
+					
 					ImageItem item = new ImageItem();
 					item.setId(image.getString("id"));
 					item.setTitle(image.getString("title"));
 					item.setCaption(image.getString("caption"));
 					
 					JSONArray display_sizes = image.getJSONArray("display_sizes");
-
+					
 					if (display_sizes != null) { 
 						for (int j = 0; j < display_sizes.length(); j++) {
 							JSONObject display = (JSONObject)display_sizes.get(j);
@@ -48,7 +48,11 @@ public class ImagesParser {
 							}
 						}
 					}
-					list.add(item);
+					
+					if (list.size() <= listIdx)
+						list.add(item);
+					else
+						list.get(listIdx).makeItReady(item);
 				}
 			}
 			
@@ -56,6 +60,6 @@ public class ImagesParser {
 			e.printStackTrace();
 		}
 		
-		return list;
+		return querySize;
 	}
 }

@@ -54,13 +54,17 @@ android {
                        sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    testOptions.unitTests.all {
+     testLogging {
+      events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+    }
+  }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:design:23.1.1'
     compile 'com.google.android.gms:play-services-ads:7.8.0'
     compile 'com.github.bumptech.glide:glide:3.5.2'
     compile 'com.android.volley:volley:1.0.0'
@@ -77,13 +81,21 @@ dependencies {
     androidTestCompile 'org.mockito:mockito-core:1.9.5'
     androidTestCompile files('libs/dexmaker-mockito-1.0.jar')
     androidTestCompile files('libs/dexmaker-1.0.jar')
-
     //espresso dependencies
     //androidTestCompile 'com.google.guava:guava:18.0'
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
-        androidTestCompile('com.jakewharton.espresso:espresso:1.1-r3')
-    
+     androidTestCompile('com.jakewharton.espresso:espresso:1.1-r3')
 
+
+    
+        androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2') {
+exclude group: 'com.android.support', module: 'appcompat-v7'
+    exclude group: 'com.android.support', module: 'support-v4'
+    exclude module: 'recyclerview-v7'
+    
+    //    exclude module: 'support-annotations'
+      //  exclude module: 'appcompat-v7'
+          }       
 
 
 

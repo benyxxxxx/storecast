@@ -1,7 +1,7 @@
-package com.mandel.fybertest;
+package com.mandel.storecast;
 
-import com.mandel.fybertest.model.Offer;
-import com.mandel.fybertest.activity.OffersParser;
+import com.mandel.storecast.model.ImageItem;
+import com.mandel.storecast.model.ImagesParser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,10 +11,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-public class OffersParserTest {
+public class JsonParserTest {
 
 	
 	@Before
@@ -26,12 +27,13 @@ public class OffersParserTest {
 	public void parseJson() throws Exception {
 		
 		String data = readFile("sample.json");
-		List<Offer> list = OffersParser.parseJson(data);
-		assertEquals(1, list.size());
-		assertEquals("Download and START", list.get(0).getTeaser());
+		List<ImageItem> list = new ArrayList<>();
+		int itemsCount = ImagesParser.parseJson(data, list, 0);
+		assertEquals(51973, itemsCount);
+		assertEquals("452217160", list.get(0).getId());
 	}
 	
-	public String readFile (String filename) throws IOException {
+	public static String readFile (String filename) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("../app/src/test/assets/" + filename)));
 		StringBuilder buffer = new StringBuilder();
 		String line = reader.readLine();

@@ -1,18 +1,8 @@
-package com.mandel.fybertest.activity;
+package com.mandel.storecast.model;
 
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Looper;
 
 import android.content.Context;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,46 +17,54 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.UnsupportedEncodingException;
-import org.json.JSONArray;
 import android.util.Log;
 
-public class ConnectionJob {
+
+public class GettyPageBuilder implements ImagesModel.PageBuilder {
 
 	private final String API_KEY = "4x3mqfykgft2uj2zynnw4b9w";
+	private final String GETTY_URI = "https://api.gettyimages.com/v3/search/images";
+	
 
 	private Context mContext = null;
-	private int mPage;
-	private int mItemsPerPage;
-	private String mSearchWord;
-	private JobIsDoneListener mListener;
 	
-	public ConnectionJob(Context context, int page, int itemsPerPage, String searchWord,
-			     JobIsDoneListener listener) {
+	public GettyPageBuilder(Context context) {
 		this.mContext = context;	
-		mPage = page;
-		mItemsPerPage = itemsPerPage;
-		mListener = listener;
-		mSearchWord = searchWord;
-	}
-
-	public static interface JobIsDoneListener {
-		void onDone(JSONObject response, int page);
 	}
 	
-	public void execute() {
+	public void execute(ImagesModel.PageBuilderListener listener, int pageIdx, int itemsPerPage, String searchWord) {
+		new ConnectionJob(mContext, listener, pageIdx, itemsPerPage, searchWord).execute();
+	}
+	
+	public class ConnectionJob  {
+		
+		private Context mContext = null;
+		private int mPage;
+		private int mItemsPerPage;
+		private String mSearchWord;
+		private ImagesModel.PageBuilderListener mListener;
+		
+		public ConnectionJob(Context context, ImagesModel.PageBuilderListener listener,
+				     int page, int itemsPerPage, String searchWord) {
+			mContext = context;	
+			mPage = page;
+			mItemsPerPage = itemsPerPage;
+			mListener = listener;
+			mSearchWord = searchWord;
+		}
+		
+		public void execute() {
 		
 		// TODO Auto-generated method stub  
 		String searchString = "What you want to search";  
 		final HashMap<String, String> header = new HashMap<String, String>();  
 		header.put("Api-Key", API_KEY);  
 		String getImageUrl = null;  
-		getImageUrl =
-			"https://api.gettyimages.com/v3/search/images?page=" + (mPage+1)  +
+		getImageUrl = GETTY_URI +
+			"?page=" + (mPage+1)  +
 			"&page_size=" + mItemsPerPage +
 			"&phrase=" + mSearchWord;  
-		Log.d("--->getImageUrl", getImageUrl);
-		
+
 		JsonObjectRequest getImageData =
 			new JsonObjectRequest(getImageUrl, null, new Response.Listener<JSONObject>() {  
 					//@SuppressLint("NewApi") @Override  
@@ -74,14 +72,15 @@ public class ConnectionJob {
 						try {  
 							onResponseGetImages(response);  
 						} catch (JSONException e) {  
-								// TODO Auto-generated catch block  
+							// TODO Auto-generated catch block  
 							e.printStackTrace();  
 						}  
 					}  
 				}, new Response.ErrorListener() {  
 						@Override  
 						public void onErrorResponse(VolleyError error) {  
-							// TODO Auto-generated method stub  
+							// TODO Auto-generated method stub
+							mListener.onError();
 						}  
 					}){  
 				@Override  
@@ -90,21 +89,11 @@ public class ConnectionJob {
 				}  
 			};  
 		AppRequestQueue.getInstance(mContext).addToRequestQueue(getImageData);  
-	}  
-	
-	private void onResponseGetImages(JSONObject response)  
-		throws JSONException {  
-		Log.d("onResponseGetImages", response.toString());
-		mListener.onDone(response, mPage);
-	}  
+		}  
 		
-		
-	//@Override
-	//protected void onPostExecute(Message msg) {
-	//mHandler.sendMessage(msg);
-	//}
+		private void onResponseGetImages(JSONObject response)  
+			throws JSONException {  
+			mListener.onDone(response, mPage);
+		} 
+	}
 }
-
-
-	
-    
