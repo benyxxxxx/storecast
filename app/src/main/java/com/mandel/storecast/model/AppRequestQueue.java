@@ -10,6 +10,12 @@ import com.android.volley.Response.Listener;
 import android.graphics.Bitmap;
 import android.content.Context;
 
+/**
+ * An singelton request queue for volley requests.
+ * TBD add Caching.
+ */
+
+
 public class AppRequestQueue {
 	private static AppRequestQueue mInstance;
 	private RequestQueue mRequestQueue;

@@ -11,20 +11,35 @@ import org.json.JSONArray;
 
 import android.util.Log;
 
+/**
+ * Image's model. This model support pagination on demand. 
+ * 
+ *  This is the flow:
+ *
+ *  1. Will be initialased with an empty page if asked for size. 
+ *  2. Will get the real items count when the first data arrives.
+ *  3. Asks for data on demand, loads missing pages whenever unloaded item is accessed.
+ *
+ */
 public class ImagesModel  {
 	
 	public interface ImagesModelListener {
 		public void dataChanged(int from, int to);
 	}
+
 	
+	/**
+	 * An Interface for asynchronous data requests.  
+	 */
+	public interface PageBuilder {
+		void execute(PageBuilderListener listener, int pageIdx, int itemsPerPage, String searchWord);
+	}
+
 	public interface PageBuilderListener {
 		void onDone(JSONObject response, int page);
 		void onError();
 	}
-	
-	public interface PageBuilder {
-		void execute(PageBuilderListener listener, int pageIdx, int itemsPerPage, String searchWord);
-	}
+
 	
 
 	private ArrayList<ImageItem> mData = new ArrayList<ImageItem>();
@@ -46,12 +61,22 @@ public class ImagesModel  {
 		mItemsPerPage = itemsPerPage;
 		mListener = listener;
 	}
+
+	/**
+	 * Retrieves a current items size of the model, can change when data arrives.
+	 * Can take a temporal value equal of the page size before data arrived.
+	 */
 	
 	public int getSize() {
 		checkSizeCapacity();
 		return mQuerySize;
 	}
-	
+
+	/**
+	 * Retrieves an element at index
+	 * @param i index of an element
+	 * @return ImageItem, maybe in loaded and unloaded state. 
+	 */
 	public ImageItem getElementAt(int i) {
 		checkAccess(i);
 		return mData.get(i);

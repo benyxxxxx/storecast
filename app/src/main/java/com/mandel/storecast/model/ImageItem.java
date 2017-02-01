@@ -1,5 +1,10 @@
 package com.mandel.storecast.model;
 
+/**
+ * Holds data for an Image item.
+ * Can be in a loaded state(ready) and unloaded state (not ready)  
+ *
+ */
 public class ImageItem {
 	
 	private String mTitle = "";
@@ -44,7 +49,9 @@ public class ImageItem {
 		return mIsReady;
 	}
 
-	
+	/**
+	 * This call will load the object with data and put it in ready state.
+	 */
 	public void makeItReady(ImageItem placeHolder) {
 		this.mUri = placeHolder.getUri();
 		this.mTitle = placeHolder.getTitle();

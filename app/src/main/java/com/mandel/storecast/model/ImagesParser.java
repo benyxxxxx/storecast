@@ -19,7 +19,13 @@ public class ImagesParser {
 			return -1;
 		}	
 	}
-	
+
+	/**
+	 * Parses an JsonObject and fill up the given list with data
+	 * @param obj a json object to parse
+	 * @list an obj t populate with data
+	 * @listIdxStart an start  index inside of list to be populated 
+	 */
 	public static  int parseJson(JSONObject obj, List<ImageItem> list, int listIdxStart) {
 		
 		int querySize = 0;

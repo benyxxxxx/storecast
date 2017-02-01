@@ -19,6 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.util.Log;
 
+/**
+ * An implementation of ImagesModel.PageBuilder for Getty Images
+ */
 
 public class GettyPageBuilder implements ImagesModel.PageBuilder {
 

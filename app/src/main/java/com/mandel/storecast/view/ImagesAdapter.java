@@ -29,6 +29,11 @@ import java.util.TimerTask;
 import java.util.List;
 import android.util.Log;
 
+
+/**
+ * An Adapter for RecyclerView.
+ *
+ */
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.MyViewHolder>
 implements ImagesModel.ImagesModelListener {
 	
@@ -53,6 +58,10 @@ implements ImagesModel.ImagesModelListener {
 		}
 	}
 
+	/***
+	 * Sets up a new query string
+	 * @param searchWord: a new query to handle
+	 */
 	public void setupNewQuery(String searchWord) {
 		mItems.setupNewQuery(searchWord);
 		notifyDataSetChanged();
@@ -163,6 +172,9 @@ implements ImagesModel.ImagesModelListener {
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
 		ImageItem item = mItems.getElementAt(position);
+		/***
+		 * When item is loaded dislay the content, otherwise show its Loading 
+		 */
 		if (item.isReady()) { 
 			holder.mTitle.setText(item.getTitle());
 			holder.mID.setText(item.getId());
