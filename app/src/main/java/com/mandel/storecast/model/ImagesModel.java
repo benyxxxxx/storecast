@@ -107,7 +107,7 @@ public class ImagesModel  {
 		mPageBuilder.execute(mPageBuilderListener, pageIdx, mItemsPerPage, mSearchWord);
 	}
 
-
+	
 	PageBuilderListener mPageBuilderListener = new PageBuilderListener() {
 			
 			@Override
